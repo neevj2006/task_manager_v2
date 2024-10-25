@@ -144,15 +144,10 @@ const App = () => {
               }}
             >
               <Routes>
+                <Route path="/" element={user ? <Dashboard /> : <Auth />} />
                 <Route
-                  path="/"
-                  element={
-                    user ? <Navigate to="/dashboard" replace /> : <Auth />
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={user ? <Dashboard /> : <Auth />}
+                  path="*"
+                  element={user ? <Navigate to="/" replace /> : <Auth />}
                 />
               </Routes>
             </Container>
