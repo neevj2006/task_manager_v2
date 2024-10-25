@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project is a Task Tracker Application where users can sign in via Google authentication, manage tasks, and interact with a Firebase backend using RESTful APIs. The application is designed to store tasks, allow users to add, edit, and delete tasks, and filter them based on status or due date. The frontend is built with React and Redux, while the backend uses Firebase Firestore and Firebase Functions to handle user data and task management.
+This project is a Task Tracker Application where users can sign in via Google authentication, manage tasks, and interact with a Firebase backend using RESTful APIs. The application is designed to store tasks, allow users to add, edit, and delete tasks, and filter & sort them based on status or due date. The frontend is built with React and Redux, while the backend uses Firebase Firestore and Firebase Functions to handle user data and task management.
 
 ## Technologies Used
 
