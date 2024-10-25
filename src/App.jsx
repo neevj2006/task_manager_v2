@@ -16,7 +16,6 @@ import Auth from "./components/Auth";
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Header";
 import ErrorBoundary from "./components/ErrorBoundary";
-import "./App.css";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -47,31 +46,38 @@ const App = () => {
   const theme = createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
+      primary: {
+        main: darkMode ? "#90caf9" : "#1976d2",
+      },
+      background: {
+        default: darkMode ? "#303030" : "#f5f5f5",
+        paper: darkMode ? "#424242" : "#ffffff",
+      },
     },
-
     typography: {
-      fontFamily: "Arial, sans-serif",
-      h1: {
-        fontSize: "2.5rem",
-        fontWeight: 700,
+      fontFamily: "Roboto, Arial, sans-serif",
+      h1: { fontWeight: 700 },
+      h2: { fontWeight: 600 },
+      h3: { fontWeight: 600 },
+      h4: { fontWeight: 500 },
+      h5: { fontWeight: 500 },
+      h6: { fontWeight: 500 },
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+            borderRadius: 8,
+          },
+        },
       },
-      h2: {
-        fontSize: "2rem",
-        fontWeight: 600,
-      },
-      h3: {
-        fontSize: "1.75rem",
-        fontWeight: 600,
-      },
-      h4: {
-        fontSize: "1.5rem",
-        fontWeight: 500,
-      },
-      body1: {
-        fontSize: "1rem",
-      },
-      body2: {
-        fontSize: "0.875rem",
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+          },
+        },
       },
     },
   });
@@ -94,19 +100,30 @@ const App = () => {
       <CssBaseline />
       <Router>
         <ErrorBoundary>
-          <Container maxWidth="">
+          <Box
+            sx={{
+              minHeight: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              bgcolor: "background.default",
+            }}
+          >
             <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-            <Routes>
-              <Route
-                path="/"
-                element={user ? <Navigate to="/dashboard" replace /> : <Auth />}
-              />
-              <Route
-                path="/dashboard"
-                element={user ? <Dashboard /> : <Navigate to="/" replace />}
-              />
-            </Routes>
-          </Container>
+            <Container maxWidth="lg" sx={{ flexGrow: 1, py: 4 }}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    user ? <Navigate to="/dashboard" replace /> : <Auth />
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={user ? <Dashboard /> : <Navigate to="/" replace />}
+                />
+              </Routes>
+            </Container>
+          </Box>
         </ErrorBoundary>
       </Router>
     </ThemeProvider>
