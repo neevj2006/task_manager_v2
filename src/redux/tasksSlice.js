@@ -1,23 +1,30 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { db, auth } from "../firebase";
+import { auth } from "../firebase";
+
+const API_BASE_URL = "https://your-firebase-function-url.com/api"; // Replace with your actual Firebase Function URL
+
+const getAuthToken = async () => {
+  const user = auth.currentUser;
+  if (user) {
+    return user.getIdToken();
+  }
+  throw new Error("User not authenticated");
+};
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
-  async (userId, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const q = query(collection(db, "tasks"), where("userId", "==", userId));
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const token = await getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/tasks`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
+      }
+      return response.json();
     } catch (error) {
       console.error("Error fetching tasks:", error);
       return rejectWithValue(error.message);
@@ -29,13 +36,19 @@ export const addTask = createAsyncThunk(
   "tasks/addTask",
   async (task, { rejectWithValue }) => {
     try {
-      const user = auth.currentUser;
-      if (!user) {
-        throw new Error("User not authenticated");
+      const token = await getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/tasks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(task),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add task");
       }
-      const taskWithUserId = { ...task, userId: user.uid };
-      const docRef = await addDoc(collection(db, "tasks"), taskWithUserId);
-      return { id: docRef.id, ...taskWithUserId };
+      return response.json();
     } catch (error) {
       console.error("Error adding task:", error);
       return rejectWithValue(error.message);
@@ -47,9 +60,19 @@ export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async (task, { rejectWithValue }) => {
     try {
-      const taskRef = doc(db, "tasks", task.id);
-      await updateDoc(taskRef, task);
-      return task;
+      const token = await getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/tasks/${task.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(task),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      }
+      return response.json();
     } catch (error) {
       console.error("Error updating task:", error);
       return rejectWithValue(error.message);
@@ -61,7 +84,16 @@ export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (taskId, { rejectWithValue }) => {
     try {
-      await deleteDoc(doc(db, "tasks", taskId));
+      const token = await getAuthToken();
+      const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
       return taskId;
     } catch (error) {
       console.error("Error deleting task:", error);
@@ -91,16 +123,8 @@ const tasksSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(addTask.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(addTask.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.tasks.push(action.payload);
-      })
-      .addCase(addTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
       })
       .addCase(updateTask.fulfilled, (state, action) => {
         const index = state.tasks.findIndex(
@@ -110,16 +134,8 @@ const tasksSlice = createSlice({
           state.tasks[index] = action.payload;
         }
       })
-      .addCase(updateTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
-      })
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.tasks = state.tasks.filter((task) => task.id !== action.payload);
-      })
-      .addCase(deleteTask.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
       });
   },
 });
