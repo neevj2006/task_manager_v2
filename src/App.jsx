@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Container, Box, CircularProgress } from "@mui/material";
+import { Container, Box, CircularProgress, useMediaQuery } from "@mui/material";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { setUser } from "./redux/authSlice";
@@ -22,6 +22,11 @@ const App = () => {
   const user = useSelector((state) => state.auth.user);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  useEffect(() => {
+    setDarkMode(prefersDarkMode);
+  }, [prefersDarkMode]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -48,10 +53,21 @@ const App = () => {
       mode: darkMode ? "dark" : "light",
       primary: {
         main: darkMode ? "#90caf9" : "#1976d2",
+        light: darkMode ? "#e3f2fd" : "#42a5f5",
+        dark: darkMode ? "#42a5f5" : "#1565c0",
+      },
+      secondary: {
+        main: darkMode ? "#f48fb1" : "#e91e63",
+        light: darkMode ? "#fce4ec" : "#f06292",
+        dark: darkMode ? "#f06292" : "#c2185b",
       },
       background: {
-        default: darkMode ? "#303030" : "#f5f5f5",
-        paper: darkMode ? "#424242" : "#ffffff",
+        default: darkMode ? "#121212" : "#f5f5f5",
+        paper: darkMode ? "#1e1e1e" : "#ffffff",
+      },
+      text: {
+        primary: darkMode ? "#ffffff" : "#000000",
+        secondary: darkMode ? "#b0bec5" : "#757575",
       },
     },
     typography: {
@@ -64,6 +80,15 @@ const App = () => {
       h6: { fontWeight: 500 },
     },
     components: {
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            boxShadow: "none",
+            borderBottom: "1px solid",
+            borderColor: "divider",
+          },
+        },
+      },
       MuiButton: {
         styleOverrides: {
           root: {
@@ -102,14 +127,22 @@ const App = () => {
         <ErrorBoundary>
           <Box
             sx={{
-              minHeight: "100vh",
               display: "flex",
               flexDirection: "column",
+              minHeight: "100vh",
               bgcolor: "background.default",
+              color: "text.primary",
             }}
           >
             <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-            <Container maxWidth="lg" sx={{ flexGrow: 1, py: 4 }}>
+            <Container
+              maxWidth="lg"
+              sx={{
+                flexGrow: 1,
+                py: { xs: 2, sm: 3, md: 4 },
+                px: { xs: 2, sm: 3 },
+              }}
+            >
               <Routes>
                 <Route
                   path="/"

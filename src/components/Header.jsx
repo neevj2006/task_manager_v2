@@ -41,12 +41,16 @@ const Header = ({ darkMode, setDarkMode }) => {
     <AppBar
       position="static"
       color="default"
-      elevation={0}
-      sx={{ borderBottom: "1px solid #e0e0e0" }}
+      sx={{
+        bgcolor: "background.paper",
+        color: "text.primary",
+        borderRadius: "0px",
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Typography
-          variant={isMobile ? "h6" : "h4"}
+          variant={isMobile ? "h6" : "h5"}
           component="div"
           sx={{ flexGrow: 1, fontWeight: "bold", letterSpacing: 1 }}
         >
@@ -65,7 +69,7 @@ const Header = ({ darkMode, setDarkMode }) => {
                   <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                     {user.displayName}
                   </Typography>
-                  <Typography variant="caption" color="textSecondary">
+                  <Typography variant="caption" color="text.secondary">
                     {user.email}
                   </Typography>
                 </Box>
@@ -133,6 +137,12 @@ const Header = ({ darkMode, setDarkMode }) => {
                 color="inherit"
                 onClick={handleLogout}
                 startIcon={<Logout />}
+                sx={{
+                  ml: 2,
+                  "&:hover": {
+                    bgcolor: "action.hover",
+                  },
+                }}
               >
                 Logout
               </Button>

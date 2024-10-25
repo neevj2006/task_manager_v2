@@ -108,10 +108,10 @@ const Dashboard = () => {
   const filteredTasks = tasks.filter((task) => {
     if (filter.status !== "All" && task.status !== filter.status) return false;
     if (filter.dueDate !== "All") {
-      const today = new Date().toISOString().split("T")[0];
-      const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
+      const today = new Date(new Date().setDate(new Date().getDate() - 1))
         .toISOString()
         .split("T")[0];
+      const tomorrow = new Date().toISOString().split("T")[0];
       if (filter.dueDate === "Today" && task.dueDate !== today) return false;
       if (filter.dueDate === "Tomorrow" && task.dueDate !== tomorrow)
         return false;
@@ -161,7 +161,7 @@ const Dashboard = () => {
     <Container maxWidth="lg">
       <Box mt={4} mb={6} pt={isMobile ? 2 : 0}>
         <Typography
-          variant="h2"
+          variant="h3"
           gutterBottom
           align="center"
           sx={{ fontWeight: "bold", letterSpacing: 1 }}
@@ -183,7 +183,7 @@ const Dashboard = () => {
             boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: "medium" }}>
+          <Typography variant="h5" gutterBottom sx={{ fontWeight: "medium" }}>
             Add New Task
           </Typography>
           <Grid container spacing={2}>
@@ -268,7 +268,7 @@ const Dashboard = () => {
         </Paper>
 
         <Box mb={4}>
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: "medium" }}>
+          <Typography variant="h5" gutterBottom sx={{ fontWeight: "medium" }}>
             Tasks
           </Typography>
           <Grid container spacing={2} alignItems="center">
@@ -340,7 +340,7 @@ const Dashboard = () => {
             elevation={2}
             sx={{ p: 4, textAlign: "center", borderRadius: 2 }}
           >
-            <Typography variant="h5" color="textSecondary">
+            <Typography variant="h6" color="textSecondary">
               No tasks available. Start by adding a new task!
             </Typography>
           </Paper>
@@ -476,13 +476,16 @@ const Dashboard = () => {
                             ? "primary"
                             : "success"
                         }
-                        sx={{ mb: 2 }}
+                        sx={{ mb: 2, mt: -4, borderRadius: 2 }}
                       />
                       <Typography
                         variant="body2"
                         sx={{ mb: 2, fontWeight: "medium" }}
                       >
-                        Due: {new Date(task.dueDate).toLocaleDateString()}
+                        Due:{" "}
+                        {new Date(
+                          task.dueDate + "T20:00:00"
+                        ).toLocaleDateString()}
                       </Typography>
                       <Box
                         sx={{
