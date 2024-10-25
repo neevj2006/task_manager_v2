@@ -1,10 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
   }
+
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+  };
 
   static getDerivedStateFromError(error) {
     return { hasError: true, error: error };
@@ -19,8 +24,6 @@ class ErrorBoundary extends React.Component {
       return <h1>Something went wrong. Please try refreshing the page.</h1>;
     }
 
-    // Missing props validation
-    // eslint-disable-next-line react/prop-types
     return this.props.children;
   }
 }

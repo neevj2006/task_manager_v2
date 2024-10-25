@@ -16,8 +16,13 @@ import {
 import { Brightness4, Brightness7, Logout } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { auth } from "../firebase";
+import PropTypes from "prop-types";
 
-// eslint-disable-next-line react/prop-types
+Header.propTypes = {
+  darkMode: PropTypes.bool.isRequired,
+  setDarkMode: PropTypes.func.isRequired,
+};
+
 const Header = ({ darkMode, setDarkMode }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));

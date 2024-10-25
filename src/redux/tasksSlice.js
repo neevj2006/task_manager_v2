@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth } from "../firebase";
 
-const API_BASE_URL = "https://api-dofjokisfa-uc.a.run.app"; // Replace with your actual Firebase Function URL
+const API_BASE_URL = "https://api-dofjokisfa-uc.a.run.app";
 
 const getAuthToken = async () => {
   const user = auth.currentUser;
