@@ -18,11 +18,6 @@ import { useSelector } from "react-redux";
 import { auth } from "../firebase";
 import PropTypes from "prop-types";
 
-Header.propTypes = {
-  darkMode: PropTypes.bool.isRequired,
-  setDarkMode: PropTypes.func.isRequired,
-};
-
 const Header = ({ darkMode, setDarkMode }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -159,4 +154,8 @@ const Header = ({ darkMode, setDarkMode }) => {
   );
 };
 
+Header.propTypes = {
+  darkMode: PropTypes.bool.isRequired,
+  setDarkMode: PropTypes.func.isRequired,
+};
 export default Header;
