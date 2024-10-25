@@ -158,4 +158,5 @@ Header.propTypes = {
   darkMode: PropTypes.bool.isRequired,
   setDarkMode: PropTypes.func.isRequired,
 };
+
 export default Header;
