@@ -9,7 +9,7 @@ admin.initializeApp();
 const app = express();
 app.use(cors({ origin: true }));
 
-// Middleware to verify Firebase ID token
+// Middleware to verify Firebase authentication token
 const authenticateUser = async (req, res, next) => {
   const { authorization } = req.headers;
 
@@ -29,6 +29,7 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
+// Retrieves tasks filtered by user ID from Firestore
 // GET /tasks
 app.get("/tasks", authenticateUser, async (req, res) => {
   try {
@@ -50,6 +51,7 @@ app.get("/tasks", authenticateUser, async (req, res) => {
   }
 });
 
+// Creates new task with user ID in Firestore
 // POST /tasks
 app.post("/tasks", authenticateUser, async (req, res) => {
   try {
@@ -72,6 +74,7 @@ app.post("/tasks", authenticateUser, async (req, res) => {
   }
 });
 
+// Updates task after verifying user ownership
 // PUT /tasks/:id
 app.put("/tasks/:id", authenticateUser, async (req, res) => {
   try {
@@ -91,22 +94,21 @@ app.put("/tasks/:id", authenticateUser, async (req, res) => {
 
     await taskRef.update({ title, description, status, dueDate });
 
-    res
-      .status(200)
-      .json({
-        id: taskId,
-        title,
-        description,
-        status,
-        dueDate,
-        userId: req.user.uid,
-      });
+    res.status(200).json({
+      id: taskId,
+      title,
+      description,
+      status,
+      dueDate,
+      userId: req.user.uid,
+    });
   } catch (error) {
     console.error("Error updating task:", error);
     res.status(500).json({ error: "Failed to update task" });
   }
 });
 
+// Deletes task after verifying user ownership
 // DELETE /tasks/:id
 app.delete("/tasks/:id", authenticateUser, async (req, res) => {
   try {

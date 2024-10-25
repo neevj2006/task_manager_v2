@@ -11,10 +11,12 @@ class ErrorBoundary extends React.Component {
     children: PropTypes.node.isRequired,
   };
 
+  // Updates state when an error occurs in child components
   static getDerivedStateFromError(error) {
     return { hasError: true, error: error };
   }
 
+  // Logs error details to console for debugging
   componentDidCatch(error, errorInfo) {
     console.error("Error caught by ErrorBoundary:", error, errorInfo);
   }

@@ -33,6 +33,7 @@ import {
   fetchTasks,
 } from "../redux/tasksSlice";
 
+// Constants for input field validation
 const MAX_TITLE_LENGTH = 20;
 const MAX_DESCRIPTION_LENGTH = 100;
 
@@ -59,6 +60,7 @@ const Dashboard = () => {
     }
   }, [dispatch, user]);
 
+  // Validates task input fields and sets appropriate error messages
   const validateTask = (task) => {
     const newErrors = {};
     if (!task.title.trim()) {
@@ -105,6 +107,7 @@ const Dashboard = () => {
     setErrors({});
   };
 
+  // Filters tasks based on status and due date criteria
   const filteredTasks = tasks.filter((task) => {
     if (filter.status !== "All" && task.status !== filter.status) return false;
     if (filter.dueDate !== "All") {
@@ -121,6 +124,7 @@ const Dashboard = () => {
     return true;
   });
 
+  // Sorts tasks by due date or title, handling both ascending and descending orders
   const sortedTasks = [...filteredTasks].sort((a, b) => {
     if (sort.field === "dueDate") {
       return sort.direction === "asc"

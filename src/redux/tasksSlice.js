@@ -3,6 +3,7 @@ import { auth } from "../firebase";
 
 const API_BASE_URL = "https://api-dofjokisfa-uc.a.run.app";
 
+// Handles authentication for API calls
 const getAuthToken = async () => {
   const user = auth.currentUser;
   if (user) {
@@ -102,6 +103,7 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
+// Redux slice for managing tasks with async operations
 const tasksSlice = createSlice({
   name: "tasks",
   initialState: {

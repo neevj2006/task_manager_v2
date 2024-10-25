@@ -20,8 +20,14 @@ import PropTypes from "prop-types";
 
 const Header = ({ darkMode, setDarkMode }) => {
   const theme = useTheme();
+
+  // Conditionally renders mobile or desktop navigation elements
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  // Manages user authentication state
   const user = useSelector((state) => state.auth.user);
+
+  // Manages dropdown menu state for mobile view
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenu = (event) => {
@@ -32,6 +38,7 @@ const Header = ({ darkMode, setDarkMode }) => {
     setAnchorEl(null);
   };
 
+  // Handles user logout and menu closure
   const handleLogout = () => {
     auth.signOut();
     handleClose();
