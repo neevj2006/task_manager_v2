@@ -70,5 +70,5 @@ This project is a Task Tracker Application where users can sign in via Google au
 
 ## Links
 
-- **Live Project**: [Deployed Link](https://task-manager-v2-gamma.vercel.app/)
+- **Live Project**: [Deployed Link](https://task-manager-v2-inky.vercel.app/)
 - **GitHub Repository**: [GitHub Link](https://github.com/neevj2006/task_manager_v2)
