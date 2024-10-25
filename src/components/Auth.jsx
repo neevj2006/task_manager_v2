@@ -12,9 +12,17 @@ const Auth = () => {
   };
 
   return (
-    <Button variant="contained" onClick={signInWithGoogle}>
-      Sign in with Google
-    </Button>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "100px",
+      }}
+    >
+      <Button variant="contained" onClick={signInWithGoogle} color="primary">
+        Sign in with Google
+      </Button>
+    </div>
   );
 };
 

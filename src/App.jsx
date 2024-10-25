@@ -152,7 +152,7 @@ const App = () => {
                 />
                 <Route
                   path="/dashboard"
-                  element={user ? <Dashboard /> : <Navigate to="/" replace />}
+                  element={user ? <Dashboard /> : <Auth />}
                 />
               </Routes>
             </Container>
